@@ -58,6 +58,7 @@ class _HomePageState extends State<HomePage> {
       body: DecoratedBox(
         decoration: const BoxDecoration(
           image: DecorationImage(
+              // <a href="https://www.freepik.com/free-photo/white-painted-wall-texture-background_18416494.htm#query=background&position=1&from_view=keyword&track=sph&uuid=6a64bba8-e2c9-4c43-88b7-636b877afb20">Image by rawpixel.com</a> on Freepik
               image: AssetImage("images/background.jpg"),
               fit: BoxFit.cover,
               opacity: 0.6),
