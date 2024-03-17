@@ -13,6 +13,8 @@ class ListPage extends StatefulWidget {
 class _ListPageState extends State<ListPage> {
   final _lists = Hive.box('lists');
 
+  final TextEditingController listNameController = TextEditingController();
+
   Map getAllLists() {
     return _lists.toMap();
   }
@@ -31,7 +33,7 @@ class _ListPageState extends State<ListPage> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith());
+    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith());
 
     // Map<String, List> data = {
     //   "To-Do": [
@@ -173,7 +175,9 @@ class _ListPageState extends State<ListPage> {
                                 MaterialStatePropertyAll(Colors.black),
                             alignment: Alignment.bottomCenter,
                             padding: MaterialStatePropertyAll(EdgeInsets.zero)),
-                        onPressed: () {},
+                        onPressed: () {
+                          _dialogBuilder(context);
+                        },
                         icon: const Icon(Icons.add),
                         label: const Text(
                           'New List',
@@ -214,6 +218,70 @@ class _ListPageState extends State<ListPage> {
           ),
         ),
       ),
+    );
+  }
+
+  Future<void> _dialogBuilder(
+    BuildContext context,
+  ) {
+    return showDialog<void>(
+      context: context,
+      useSafeArea: true,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          alignment: Alignment.center,
+          scrollable: true,
+          content: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextFormField(
+                  controller: listNameController,
+                  cursorColor: Colors.black87,
+                  decoration: const InputDecoration(
+                      focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black87))),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            Center(
+              child: SizedBox(
+                width: 200,
+                height: 50,
+                child: OutlinedButton(
+                  onPressed: () {
+                    addList(listNameController.text);
+                    listNameController.text = "";
+                    Navigator.pop(context);
+                    setState(() {});
+                  },
+                  style: ButtonStyle(
+                    side: const MaterialStatePropertyAll(
+                      BorderSide(color: Colors.white, width: 2),
+                    ),
+                    backgroundColor:
+                        MaterialStatePropertyAll(Colors.grey.shade800),
+                    foregroundColor:
+                        const MaterialStatePropertyAll(Colors.white),
+                    shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0))),
+                  ),
+                  child: const Text(
+                    "Add",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            )
+          ],
+        );
+      },
     );
   }
 }
