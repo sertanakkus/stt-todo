@@ -1,10 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:record/record.dart';
 import 'package:voice_todo/services/speech_service.dart';
+import 'package:voice_todo/storage/storage_functions.dart';
 
 class ItemPage extends StatefulWidget {
   final MapEntry items;
@@ -173,6 +173,8 @@ class _ItemPageState extends State<ItemPage> {
               final id =
                   await SpeechService().transcribeUploadedAudio(uploadUrl);
               final transcription = await SpeechService().getTranscription(id);
+
+              addItem(items.key, transcription);
               print('Transcription: $transcription');
             } else {
               await start();
@@ -187,5 +189,10 @@ class _ItemPageState extends State<ItemPage> {
         ),
       ),
     );
+  }
+
+  void addItem(String listName, String transcription) {
+    StorageFunctions().addItem(listName, transcription);
+    setState(() {});
   }
 }

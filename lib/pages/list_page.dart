@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:voice_todo/pages/item_page.dart';
+import 'package:voice_todo/storage/storage_functions.dart';
 
 class ListPage extends StatefulWidget {
   const ListPage({super.key});
@@ -11,25 +10,7 @@ class ListPage extends StatefulWidget {
 }
 
 class _ListPageState extends State<ListPage> {
-  final _lists = Hive.box('lists');
-
   final TextEditingController listNameController = TextEditingController();
-
-  Map getAllLists() {
-    return _lists.toMap();
-  }
-
-  void addList(String name) {
-    _lists.put(name, []);
-  }
-
-  void getList(String name) {
-    _lists.get(name);
-  }
-
-  void deleteList(String name) {
-    _lists.delete(name);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +39,7 @@ class _ListPageState extends State<ListPage> {
     //   ],
     // };
 
-    Map data = getAllLists();
+    Map data = StorageFunctions().getAllLists();
 
     return Scaffold(
       // backgroundColor: const Color.fromARGB(235, 255, 255, 255),
@@ -119,7 +100,7 @@ class _ListPageState extends State<ListPage> {
                         direction: DismissDirection.endToStart,
                         onDismissed: (direction) {
                           // data.remove(item.key);
-                          deleteList(item.key);
+                          StorageFunctions().deleteList(item.key);
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                                 padding: const EdgeInsets.only(top: 10),
@@ -256,7 +237,7 @@ class _ListPageState extends State<ListPage> {
                 height: 50,
                 child: OutlinedButton(
                   onPressed: () {
-                    addList(listNameController.text);
+                    StorageFunctions().addList(listNameController.text);
                     listNameController.text = "";
                     Navigator.pop(context);
                     setState(() {});
