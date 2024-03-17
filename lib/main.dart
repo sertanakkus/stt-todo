@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:voice_todo/pages/home_page.dart';
+import 'package:voice_todo/pages/list_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
       title: 'Voice ToDo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: const HomePage(),
+      home: const ListPage(),
     );
   }
 }

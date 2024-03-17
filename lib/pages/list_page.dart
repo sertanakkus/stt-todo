@@ -1,15 +1,15 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:voice_todo/pages/item_page.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class ListPage extends StatefulWidget {
+  const ListPage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<ListPage> createState() => _ListPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _ListPageState extends State<ListPage> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith());
@@ -37,24 +37,8 @@ class _HomePageState extends State<HomePage> {
       ],
     };
 
-    List<String> listsData = [
-      "To-Do",
-      "Groceries",
-      "Home",
-      "Places to eat",
-    ];
-
-    List<String> itemsData = [
-      "Item 1",
-      "Item 2",
-      "Item 3",
-      "Item 4",
-      "Item 5",
-      "Item 6",
-    ];
-
     return Scaffold(
-      backgroundColor: const Color.fromARGB(235, 255, 255, 255),
+      // backgroundColor: const Color.fromARGB(235, 255, 255, 255),
       body: DecoratedBox(
         decoration: const BoxDecoration(
           image: DecorationImage(
@@ -111,7 +95,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                         direction: DismissDirection.endToStart,
                         onDismissed: (direction) {
-                          listsData.removeAt(index);
+                          data.remove(item.key);
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                                 padding: const EdgeInsets.only(top: 10),
@@ -137,6 +121,12 @@ class _HomePageState extends State<HomePage> {
                             child: ListTile(
                                 onTap: () {
                                   print(item.value);
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            ItemPage(items: item),
+                                      ));
                                 },
                                 leading: const Icon(Icons.list),
                                 title: Text(
@@ -192,7 +182,9 @@ class _HomePageState extends State<HomePage> {
           // backgroundColor: Colors.white12,
           // backgroundColor: Colors.grey[850],
           backgroundColor: Colors.grey.shade50,
-          onPressed: () {},
+          onPressed: () {
+            setState(() {});
+          },
           child: Icon(
             Icons.mic,
             size: 40,
