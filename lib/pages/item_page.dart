@@ -1,4 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:record/record.dart';
+import 'package:voice_todo/services/speech_service.dart';
 
 class ItemPage extends StatefulWidget {
   final MapEntry items;
@@ -10,6 +16,49 @@ class ItemPage extends StatefulWidget {
 }
 
 class _ItemPageState extends State<ItemPage> {
+  final recorder = AudioRecorder();
+  bool isStarted = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    initRecorder();
+  }
+
+  @override
+  void dispose() {
+    recorder.dispose();
+    super.dispose();
+  }
+
+  Future initRecorder() async {
+    final status = await Permission.microphone.request();
+
+    if (status != PermissionStatus.granted) {
+      throw 'Microphone permission not granted';
+    }
+  }
+
+  Future start() async {
+    if (await recorder.hasPermission()) {
+      await recorder.start(const RecordConfig(),
+          path: '/Users/sertanakkus/Desktop/records/record.m4a');
+      isStarted = true;
+    }
+  }
+
+  Future stop() async {
+    final path = await recorder.stop();
+    isStarted = false;
+
+    final audioFile = File(path!);
+
+    return audioFile;
+
+    // await recorder.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     MapEntry items = widget.items;
@@ -115,12 +164,23 @@ class _ItemPageState extends State<ItemPage> {
         width: 80,
         height: 80,
         child: FloatingActionButton(
-          // backgroundColor: Colors.white12,
-          // backgroundColor: Colors.grey[850],
           backgroundColor: Colors.grey.shade50,
-          onPressed: () {},
+          onPressed: () async {
+            if (await recorder.isRecording()) {
+              File audioFile = await stop();
+              setState(() {});
+              final uploadUrl = await SpeechService().uploadAudio(audioFile);
+              final id =
+                  await SpeechService().transcribeUploadedAudio(uploadUrl);
+              final transcription = await SpeechService().getTranscription(id);
+              print('Transcription: $transcription');
+            } else {
+              await start();
+            }
+            setState(() {});
+          },
           child: Icon(
-            Icons.mic,
+            isStarted ? Icons.stop : Icons.mic,
             size: 40,
             color: Colors.grey.shade700,
           ),

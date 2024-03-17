@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:voice_todo/pages/list_page.dart';
@@ -9,6 +10,8 @@ void main() async {
   Hive.init(appDocumentDirectory.path);
 
   var box = await Hive.openBox('lists');
+  await dotenv.load(
+      fileName: '/Users/sertanakkus/Desktop/flutter-apps/voice_todo/.env');
   runApp(const MyApp());
 }
 

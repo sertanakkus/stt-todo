@@ -124,7 +124,7 @@ class _ListPageState extends State<ListPage> {
                             SnackBar(
                                 padding: const EdgeInsets.only(top: 10),
                                 backgroundColor: Colors.grey[700],
-                                duration: Durations.long4,
+                                duration: Durations.extralong2,
                                 content: Align(
                                     child: Text(
                                   '"${item.key}" deleted',
