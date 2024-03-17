@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:voice_todo/pages/item_page.dart';
 
 class ListPage extends StatefulWidget {
@@ -10,32 +11,52 @@ class ListPage extends StatefulWidget {
 }
 
 class _ListPageState extends State<ListPage> {
+  final _lists = Hive.box('lists');
+
+  Map getAllLists() {
+    return _lists.toMap();
+  }
+
+  void addList(String name) {
+    _lists.put(name, []);
+  }
+
+  void getList(String name) {
+    _lists.get(name);
+  }
+
+  void deleteList(String name) {
+    _lists.delete(name);
+  }
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith());
 
-    Map<String, List> data = {
-      "To-Do": [
-        "To-Do Item 1",
-        "To-Do Item 2",
-        "To-Do Item 3",
-      ],
-      "Groceries": [
-        "Groceries Item 1",
-        "Groceries Item 2",
-        "Groceries Item 3",
-      ],
-      "Home": [
-        "Home Item 1",
-        "Home Item 2",
-        "Home Item 3",
-      ],
-      "Places to eat": [
-        "Places to eat Item 1",
-        "Places to eat Item 2",
-        "Places to eat Item 3",
-      ],
-    };
+    // Map<String, List> data = {
+    //   "To-Do": [
+    //     "To-Do Item 1",
+    //     "To-Do Item 2",
+    //     "To-Do Item 3",
+    //   ],
+    //   "Groceries": [
+    //     "Groceries Item 1",
+    //     "Groceries Item 2",
+    //     "Groceries Item 3",
+    //   ],
+    //   "Home": [
+    //     "Home Item 1",
+    //     "Home Item 2",
+    //     "Home Item 3",
+    //   ],
+    //   "Places to eat": [
+    //     "Places to eat Item 1",
+    //     "Places to eat Item 2",
+    //     "Places to eat Item 3",
+    //   ],
+    // };
+
+    Map data = getAllLists();
 
     return Scaffold(
       // backgroundColor: const Color.fromARGB(235, 255, 255, 255),
@@ -95,7 +116,8 @@ class _ListPageState extends State<ListPage> {
                         ),
                         direction: DismissDirection.endToStart,
                         onDismissed: (direction) {
-                          data.remove(item.key);
+                          // data.remove(item.key);
+                          deleteList(item.key);
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                                 padding: const EdgeInsets.only(top: 10),

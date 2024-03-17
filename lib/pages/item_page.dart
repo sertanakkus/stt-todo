@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ItemPage extends StatefulWidget {
-  final MapEntry<String, List<dynamic>> items;
+  final MapEntry items;
 
   const ItemPage({super.key, required this.items});
 
@@ -12,7 +12,7 @@ class ItemPage extends StatefulWidget {
 class _ItemPageState extends State<ItemPage> {
   @override
   Widget build(BuildContext context) {
-    MapEntry<String, List<dynamic>> items = widget.items;
+    MapEntry items = widget.items;
 
     return Scaffold(
       body: DecoratedBox(
