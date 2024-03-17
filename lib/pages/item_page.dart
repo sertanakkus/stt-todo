@@ -115,6 +115,7 @@ class _ItemPageState extends State<ItemPage> {
                         direction: DismissDirection.endToStart,
                         onDismissed: (direction) {
                           items.value.remove(index);
+                          StorageFunctions().deleteItem(items.key, item);
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                                 padding: const EdgeInsets.only(top: 10),

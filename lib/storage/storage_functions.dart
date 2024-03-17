@@ -19,4 +19,9 @@ class StorageFunctions {
     List list = _lists.get(listName);
     list.add(item);
   }
+
+  void deleteItem(String listName, String item) {
+    List list = _lists.get(listName);
+    list.remove(item);
+  }
 }
